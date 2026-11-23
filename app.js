@@ -23,13 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('close-options-btn').addEventListener('click', () => closeModal(modalOptions));
     document.getElementById('close-credits-btn').addEventListener('click', () => closeModal(modalCredits));
 
-    // Menü Aktifliği (Kırmızı Fırça)
-    const menuButtons = [btnContinue, btnNewGame, btnOptions, btnCredits];
-    function setFocus(btn) {
-        menuButtons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-    }
-
     function openModal(modal) {
         modal.classList.add('active');
     }
@@ -49,6 +42,163 @@ document.addEventListener('DOMContentLoaded', () => {
             toast.classList.remove('show');
         }, 2200);
     }
+
+    // ================= SES / MÜZİK OTOMATİK BAŞLATMA =================
+    const bgAudio = document.getElementById('bg-audio');
+    const musicToggle = document.getElementById('music-toggle');
+    const brightnessSlider = document.getElementById('brightness-slider');
+    const brightnessLayer = document.getElementById('brightness-layer');
+
+    bgAudio.volume = 0.65;
+
+    // --- DERİNDEN GELEN TELSİZ CIZIRTISI VE GÖK GÜRÜLTÜSÜ SİSTEMİ (Web Audio) ---
+    let ambientAudioCtx = null;
+    let ambientTimer = null;
+
+    function initAmbientSoundEngine() {
+        if (!ambientAudioCtx) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (AudioContext) ambientAudioCtx = new AudioContext();
+        }
+        if (ambientAudioCtx && ambientAudioCtx.state === 'suspended') {
+            ambientAudioCtx.resume();
+        }
+    }
+
+    // Derinden gelen gök gürültüsü uğultusu
+    function playDistantThunder() {
+        if (!musicToggle.checked || !ambientAudioCtx) return;
+        try {
+            const bufferSize = ambientAudioCtx.sampleRate * 3.5;
+            const buffer = ambientAudioCtx.createBuffer(1, bufferSize, ambientAudioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            let lastOut = 0.0;
+            for (let i = 0; i < bufferSize; i++) {
+                const white = Math.random() * 2 - 1;
+                data[i] = (lastOut + (0.02 * white)) / 1.02; // Brown noise
+                lastOut = data[i];
+            }
+
+            const noise = ambientAudioCtx.createBufferSource();
+            noise.buffer = buffer;
+
+            const filter = ambientAudioCtx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(60, ambientAudioCtx.currentTime);
+            filter.frequency.exponentialRampToValueAtTime(110, ambientAudioCtx.currentTime + 1.2);
+            filter.frequency.exponentialRampToValueAtTime(45, ambientAudioCtx.currentTime + 3.4);
+
+            const gain = ambientAudioCtx.createGain();
+            const now = ambientAudioCtx.currentTime;
+            gain.gain.setValueAtTime(0.001, now);
+            gain.gain.exponentialRampToValueAtTime(0.12, now + 1.0);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 3.4);
+
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(ambientAudioCtx.destination);
+
+            noise.start(now);
+        } catch (e) {}
+    }
+
+    // Polis telsizi cızırtısı / anons hışırtısı
+    function playRadioSquelch() {
+        if (!musicToggle.checked || !ambientAudioCtx) return;
+        try {
+            const duration = 0.22;
+            const bufferSize = ambientAudioCtx.sampleRate * duration;
+            const buffer = ambientAudioCtx.createBuffer(1, bufferSize, ambientAudioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = (Math.random() * 2 - 1) * 0.7;
+            }
+
+            const noise = ambientAudioCtx.createBufferSource();
+            noise.buffer = buffer;
+
+            const bandpass = ambientAudioCtx.createBiquadFilter();
+            bandpass.type = 'bandpass';
+            bandpass.frequency.setValueAtTime(1850, ambientAudioCtx.currentTime);
+            bandpass.Q.setValueAtTime(3.8, ambientAudioCtx.currentTime);
+
+            const gain = ambientAudioCtx.createGain();
+            const now = ambientAudioCtx.currentTime;
+            gain.gain.setValueAtTime(0.07, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+            noise.connect(bandpass);
+            bandpass.connect(gain);
+            gain.connect(ambientAudioCtx.destination);
+
+            noise.start(now);
+        } catch (e) {}
+    }
+
+    // Rastgele aralıklarla gök gürültüsü ve telsiz sesleri çal
+    function startAmbientAtmosphere() {
+        clearInterval(ambientTimer);
+        ambientTimer = setInterval(() => {
+            if (!musicToggle.checked) return;
+            const roll = Math.random();
+            if (roll < 0.45) {
+                playDistantThunder();
+            } else if (roll < 0.85) {
+                playRadioSquelch();
+            }
+        }, 14000); // 14 saniyede bir atmosfer efekti
+    }
+
+    // Sayfa açılır açılmaz müziği başlatmayı dene
+    function tryAutoplayMusic() {
+        if (!musicToggle.checked) return;
+        initAmbientSoundEngine();
+        startAmbientAtmosphere();
+
+        const playPromise = bgAudio.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(() => {
+                const startOnFirstGesture = () => {
+                    initAmbientSoundEngine();
+                    startAmbientAtmosphere();
+                    if (musicToggle.checked && bgAudio.paused) {
+                        bgAudio.play().catch(() => {});
+                    }
+                    window.removeEventListener('pointerdown', startOnFirstGesture);
+                    window.removeEventListener('touchstart', startOnFirstGesture);
+                    window.removeEventListener('click', startOnFirstGesture);
+                };
+                window.addEventListener('pointerdown', startOnFirstGesture, { once: true });
+                window.addEventListener('touchstart', startOnFirstGesture, { once: true });
+                window.addEventListener('click', startOnFirstGesture, { once: true });
+            });
+        }
+    }
+
+    tryAutoplayMusic();
+    window.addEventListener('load', tryAutoplayMusic);
+
+    musicToggle.addEventListener('change', (e) => {
+        if (e.target.checked) {
+            bgAudio.play().catch(() => {});
+            notify('Müzik Açık');
+        } else {
+            bgAudio.pause();
+            notify('Müzik Kapalı');
+        }
+    });
+
+    // Parlaklık Kontrolü
+    brightnessSlider.addEventListener('input', (e) => {
+        const val = parseInt(e.target.value);
+        if (val < 100) {
+            brightnessLayer.style.background = 'black';
+            brightnessLayer.style.opacity = ((100 - val) / 100) * 0.8;
+        } else {
+            brightnessLayer.style.background = 'white';
+            brightnessLayer.style.opacity = ((val - 100) / 100) * 0.35;
+        }
+    });
 
     // ================= SAVE / LOAD SİSTEMİ =================
     const SAVE_KEY = '54_save';
@@ -78,7 +228,6 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             document.getElementById('btn-start-from-continue').addEventListener('click', () => {
                 closeModal(modalContinue);
-                setFocus(btnNewGame);
                 openModal(modalChar);
             });
         } else {
@@ -106,16 +255,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // ================= BUTON TIKLAMALARI (DEVAM ET SABİT KALIR) =================
+
     // 1. DEVAM ET
     btnContinue.addEventListener('click', () => {
-        setFocus(btnContinue);
         renderSave();
         openModal(modalContinue);
     });
 
     // 2. YENİ OYUN (Karakter Seçimi)
     btnNewGame.addEventListener('click', () => {
-        setFocus(btnNewGame);
         openModal(modalChar);
     });
 
@@ -125,61 +274,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const now = new Date().toLocaleString('tr-TR', { dateStyle: 'short', timeStyle: 'short' });
             localStorage.setItem(SAVE_KEY, JSON.stringify({ char: name, time: now }));
             closeModal(modalChar);
-            setFocus(btnContinue);
             notify(`Seçildi: ${name}`);
         });
     });
 
     // 3. AYARLAR
     btnOptions.addEventListener('click', () => {
-        setFocus(btnOptions);
         openModal(modalOptions);
-    });
-
-    // Ses ve Parlaklık Kontrolleri
-    const bgAudio = document.getElementById('bg-audio');
-    const musicToggle = document.getElementById('music-toggle');
-    const brightnessSlider = document.getElementById('brightness-slider');
-    const brightnessLayer = document.getElementById('brightness-layer');
-
-    // Müzik Başlatma & Kontrol
-    bgAudio.volume = 0.6;
-
-    musicToggle.addEventListener('change', (e) => {
-        if (e.target.checked) {
-            bgAudio.play().catch(() => {});
-            notify('Müzik Açık');
-        } else {
-            bgAudio.pause();
-            notify('Müzik Kapalı');
-        }
-    });
-
-    // İlk dokunuşta müziği başlat
-    document.body.addEventListener('click', () => {
-        if (musicToggle.checked && bgAudio.paused) {
-            bgAudio.play().catch(() => {});
-        }
-    }, { once: true });
-
-    // Parlaklık Kontrolü
-    brightnessSlider.addEventListener('input', (e) => {
-        const val = parseInt(e.target.value);
-        if (val < 100) {
-            brightnessLayer.style.background = 'black';
-            brightnessLayer.style.opacity = ((100 - val) / 100) * 0.8;
-        } else {
-            brightnessLayer.style.background = 'white';
-            brightnessLayer.style.opacity = ((val - 100) / 100) * 0.35;
-        }
     });
 
     // 4. BÖLÜMLER
     btnCredits.addEventListener('click', () => {
-        setFocus(btnCredits);
         openModal(modalCredits);
     });
 
-    // Sayfa Yüklenişi
+    // Sayfa Başlangıcı
     renderSave();
 });

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>54</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800;900&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Parlaklık Katmanı -->
+    <div id="brightness-layer"></div>
+
+    <!-- Mobil Dikey Görünüm -->
+    <div class="mobile-container">
+
+        <!-- Arka Plan Görseli -->
+        <div class="bg-wrapper">
+            <img src="assets/bg.jpg" alt="54" class="bg-img">
+            <div class="vignette"></div>
+        </div>
+
+        <!-- ================= ANA MENÜ ================= -->
+        <div id="screen-main" class="screen">
+            
+            <!-- 54 Başlığı: 5 Kırmızı, 4 Beyaz -->
+            <div class="logo-box">
+                <span class="num-5">5</span><span class="num-4">4</span>
+            </div>
+
+            <!-- Menü Öğeleri (Türkçe) -->
+            <nav class="vampyr-menu">
+                <button class="menu-btn active" id="btn-continue">
+                    <span class="btn-text">DEVAM ET</span>
+                </button>
+                <button class="menu-btn" id="btn-new-game">
+                    <span class="btn-text">YENİ OYUN</span>
+                </button>
+                <button class="menu-btn" id="btn-options">
+                    <span class="btn-text">AYARLAR</span>
+                </button>
+                <button class="menu-btn" id="btn-credits">
+                    <span class="btn-text">BÖLÜMLER</span>
+                </button>
+            </nav>
+
+        </div>
+
+        <!-- ================= KARAKTER SEÇİMİ (YENİ OYUN) ================= -->
+        <div id="modal-characters" class="modal">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <button class="back-btn" id="close-char-btn">← GERİ</button>
+                    <h2>KARAKTER SEÇ</h2>
+                </div>
+
+                <div class="character-list">
+                    <!-- 1. Karakter -->
+                    <div class="char-card neon-red" data-name="Alper İbrahim Karakuş">
+                        <div class="char-inner">
+                            <span class="char-title">Alper İbrahim Karakuş</span>
+                            <button class="char-pick-btn">SEÇ</button>
+                        </div>
+                    </div>
+
+                    <!-- 2. Karakter -->
+                    <div class="char-card neon-red" data-name="Batuhan Keskin">
+                        <div class="char-inner">
+                            <span class="char-title">Batuhan Keskin</span>
+                            <button class="char-pick-btn">SEÇ</button>
+                        </div>
+                    </div>
+
+                    <!-- 3. Karakter -->
+                    <div class="char-card neon-red" data-name="Hamza Ayvaz">
+                        <div class="char-inner">
+                            <span class="char-title">Hamza Ayvaz</span>
+                            <button class="char-pick-btn">SEÇ</button>
+                        </div>
+                    </div>
+
+                    <!-- 4. Karakter -->
+                    <div class="char-card neon-red" data-name="Yasin Akkaya">
+                        <div class="char-inner">
+                            <span class="char-title">Yasin Akkaya</span>
+                            <button class="char-pick-btn">SEÇ</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= DEVAM ET ================= -->
+        <div id="modal-continue" class="modal">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <button class="back-btn" id="close-continue-btn">← GERİ</button>
+                    <h2>DEVAM ET</h2>
+                </div>
+
+                <div id="save-content" class="save-card-box">
+                    <!-- JS Tarafından Doldurulacak -->
+                </div>
+
+                <div class="modal-actions" id="save-actions-box">
+                    <button id="resume-btn" class="action-btn-red">DEVAM ET</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= AYARLAR ================= -->
+        <div id="modal-options" class="modal">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <button class="back-btn" id="close-options-btn">← GERİ</button>
+                    <h2>AYARLAR</h2>
+                </div>
+
+                <div class="settings-list">
+                    <!-- Müzik Aç / Kapat -->
+                    <div class="setting-item">
+                        <span class="setting-label">Müzik</span>
+                        <label class="switch">
+                            <input type="checkbox" id="music-toggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <!-- Parlaklık Aç / Kapat -->
+                    <div class="setting-item">
+                        <span class="setting-label">Parlaklık</span>
+                        <input type="range" id="brightness-slider" min="30" max="130" value="100" class="range-slider">
+                    </div>
+                </div>
+
+                <!-- ANTİ&G Productions Reklamı -->
+                <div class="antig-signature">
+                    ANTİ&G Productions
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= BÖLÜMLER ================= -->
+        <div id="modal-credits" class="modal">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <button class="back-btn" id="close-credits-btn">← GERİ</button>
+                    <h2>BÖLÜMLER</h2>
+                </div>
+
+                <div class="episodes-wrap">
+                    <div class="season-badge">1. SEZON</div>
+
+                    <div class="episode-row">
+                        <span class="ep-name">54 1. BÖLÜM</span>
+                        <span class="ep-lock">🔒 KİLİTLİ</span>
+                    </div>
+
+                    <div class="episode-row">
+                        <span class="ep-name">54 2. BÖLÜM</span>
+                        <span class="ep-lock">🔒 KİLİTLİ</span>
+                    </div>
+
+                    <div class="episode-row">
+                        <span class="ep-name">54 3. BÖLÜM</span>
+                        <span class="ep-lock">🔒 KİLİTLİ</span>
+                    </div>
+
+                    <div class="episode-row">
+                        <span class="ep-name">54 4. BÖLÜM</span>
+                        <span class="ep-lock">🔒 KİLİTLİ</span>
+                    </div>
+
+                    <div class="episode-row">
+                        <span class="ep-name">54 5. BÖLÜM</span>
+                        <span class="ep-lock">🔒 KİLİTLİ</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bildirim Toast -->
+        <div id="toast" class="toast"></div>
+
+    </div>
+
+    <!-- Ana Menü Müziği (54 mafya dizi klasöründeki ana menü müzik.mp3) -->
+    <audio id="bg-audio" loop preload="auto">
+        <source src="music.mp3" type="audio/mpeg">
+        <source src="beat.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="app.js"></script>
+</body>
+</html>

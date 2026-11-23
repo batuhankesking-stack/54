@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>54</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Parlaklık Katmanı -->
+    <div id="brightness-layer"></div>
+
+    <!-- Mobil Dikey Görünüm -->
+    <div class="mobile-container">
+
+        <!-- Arka Plan Görseli -->
+        <div class="bg-wrapper">
+            <img src="assets/bg.jpg" alt="54" class="bg-img">
+            <div class="vignette"></div>
+        </div>
+
+        <!-- ================= ANA MENÜ ================= -->
+        <div id="screen-main" class="screen">
+            
+            <!-- Vampyr Tarzı Logo: 5 Kırmızı, 4 Beyaz -->
+            <div class="logo-box">
+                <span class="num-5">5</span><span class="num-4">4</span>
+            </div>
+
+            <!-- Menü Öğeleri -->
+            <div class="vampyr-menu">
+                <button class="menu-btn active" id="btn-continue">
+                    <span>CONTINUE</span>
+                </button>
+                <button class="menu-btn" id="btn-new-game">
+                    <span>NEW GAME</span>
+                </button>
+                <button class="menu-btn" id="btn-options">
+                    <span>OPTIONS</span>
+                </button>
+                <button class="menu-btn" id="btn-credits">
+                    <span>CREDITS</span>
+                </button>
+            </div>
+
+            <div class="bottom-hint">
+                <span class="btn-circle">A</span>
+                <span class="hint-text">DOKUN / SEÇ</span>
+            </div>
+        </div>
+
+        <!-- ================= KARAKTER SEÇİMİ (NEW GAME) ================= -->
+        <div id="modal-characters" class="modal">
+            <div class="modal-box">
+                <div class="modal-header">
+                    <button class="back-btn" id="close-char-btn">← GERİ</button>
+                    <h2>KARAKTER SEÇ</h2>
+                </div>
+
+                <div class="character-list">
+                    <!-- 1. Karakter -->
+                    <div class="char-card led-strip" data-name="Alper İbrahim Karakuş">
+                        <div class="char-inner">
+                            <span class="char-title">Alper İbrahim Karakuş</span>
+                            <button class="char-pick-btn">SEÇ</button>
+                        </div>
+                    </div>
+
+                    <!-- 2. Karakter -->
+                    <div class="char-card led-strip" data-name="Batuhan Keskin">
+                        <div class="char-inner">
+                            <span class="char-title">Batuhan Keskin</span>
+                            <button class="char-pick-btn">SEÇ</button>
+                        </div>
+                    </div>
+
+                    <!-- 3. Karakter -->
+                    <div class="char-card led-strip" data-name="Hamza Ayvaz">
+                        <div class="char-inner">
+                            <span class="char-title">Hamza Ayvaz</span>
+                            <button class="char-pick-btn">SEÇ</button>
+                        </div>
+                    </div>
+
+                    <!-- 4. Karakter -->
+                    <div class="char-card led-strip" data-name="Yasin Akkaya">
+                        <div class="char-inner">
+                            <span class="char-title">Yasin Akkaya</span>
+                            <button class="char-pick-btn">SEÇ</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= DEVAM ET (CONTINUE - SAVE / LOAD) ================= -->
+        <div id="modal-continue" class="modal">
+            <div class="modal-box">
+                <div class="modal-header">
+                    <button class="back-btn" id="close-continue-btn">← GERİ</button>
+                    <h2>DEVAM ET</h2>
+                </div>
+
+                <div id="save-content" class="content-box">
+                    <!-- JS tarafından doldurulacak -->
+                </div>
+
+                <div class="modal-actions">
+                    <button id="resume-btn" class="action-btn red-btn">DEVAM ET</button>
+                    <button id="test-save-btn" class="action-btn gray-btn">Kayıt Oluştur (Test)</button>
+                    <button id="clear-save-btn" class="action-btn outline-btn">Kaydı Sil</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= AYARLAR (OPTIONS) ================= -->
+        <div id="modal-options" class="modal">
+            <div class="modal-box">
+                <div class="modal-header">
+                    <button class="back-btn" id="close-options-btn">← GERİ</button>
+                    <h2>AYARLAR</h2>
+                </div>
+
+                <div class="settings-list">
+                    <!-- Müzik Aç / Kapat -->
+                    <div class="setting-item">
+                        <span>Müzik</span>
+                        <label class="switch">
+                            <input type="checkbox" id="music-toggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <!-- Parlaklık Aç / Kapat -->
+                    <div class="setting-item">
+                        <span>Parlaklık</span>
+                        <input type="range" id="brightness-slider" min="30" max="130" value="100" class="range-bar">
+                    </div>
+                </div>
+
+                <!-- ANTİ&G Productions Reklamı -->
+                <div class="antig-signature">
+                    ANTİ&G Productions
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TÜM BÖLÜMLER (CREDITS) ================= -->
+        <div id="modal-credits" class="modal">
+            <div class="modal-box">
+                <div class="modal-header">
+                    <button class="back-btn" id="close-credits-btn">← GERİ</button>
+                    <h2>TÜM BÖLÜMLER</h2>
+                </div>
+
+                <div class="episodes-wrap">
+                    <div class="season-title">1. SEZON</div>
+
+                    <div class="episode-row locked">
+                        <span class="ep-name">54 1. BÖLÜM</span>
+                        <span class="ep-lock">🔒 KİLİTLİ</span>
+                    </div>
+
+                    <div class="episode-row locked">
+                        <span class="ep-name">54 2. BÖLÜM</span>
+                        <span class="ep-lock">🔒 KİLİTLİ</span>
+                    </div>
+
+                    <div class="episode-row locked">
+                        <span class="ep-name">54 3. BÖLÜM</span>
+                        <span class="ep-lock">🔒 KİLİTLİ</span>
+                    </div>
+
+                    <div class="episode-row locked">
+                        <span class="ep-name">54 4. BÖLÜM</span>
+                        <span class="ep-lock">🔒 KİLİTLİ</span>
+                    </div>
+
+                    <div class="episode-row locked">
+                        <span class="ep-name">54 5. BÖLÜM</span>
+                        <span class="ep-lock">🔒 KİLİTLİ</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bildirim -->
+        <div id="toast" class="toast"></div>
+
+    </div>
+
+    <audio id="bg-audio" loop preload="auto">
+        <source src="beat.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="app.js"></script>
+</body>
+</html>

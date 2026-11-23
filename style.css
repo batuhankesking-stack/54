@@ -1,0 +1,505 @@
+/* ==========================================================
+   54 | MAFYA DİZİ OYUNU
+   ========================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+    background-color: #000000;
+    font-family: 'Inter', sans-serif;
+    color: #ffffff;
+    overflow: hidden;
+    position: fixed;
+}
+
+/* Parlaklık Katmanı */
+#brightness-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    background: black;
+    opacity: 0;
+    transition: opacity 0.1s ease;
+}
+
+/* Mobil Dikey Görünüm (Telefonda tam ekran, PC'de dikey telefon oranı) */
+.mobile-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    max-width: 450px;
+    margin: 0 auto;
+    background: #000;
+    overflow: hidden;
+}
+
+/* Arka Plan Görseli */
+.bg-wrapper {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+.bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+}
+
+.vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 50%, transparent 30%, rgba(0,0,0,0.7) 80%, rgba(0,0,0,0.95) 100%),
+                linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 50%),
+                linear-gradient(to right, rgba(0,0,0,0.75) 0%, transparent 60%);
+}
+
+/* ================= ANA MENÜ (VAMPYR TARZI) ================= */
+.screen {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: calc(env(safe-area-inset-top, 20px) + 24px) 24px calc(env(safe-area-inset-bottom, 20px) + 20px) 24px;
+}
+
+/* 54 Logosu (5 Kırmızı, 4 Beyaz) */
+.logo-box {
+    font-family: 'Cinzel', serif;
+    font-size: 5rem;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: 2px;
+}
+
+.num-5 {
+    color: #e50914;
+    text-shadow: 0 0 20px rgba(229, 9, 20, 0.7);
+}
+
+.num-4 {
+    color: #ffffff;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+/* Vampyr Menü Listesi */
+.vampyr-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-top: 30px;
+    margin-bottom: auto;
+    width: 100%;
+    max-width: 280px;
+}
+
+.menu-btn {
+    position: relative;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #d1d5db;
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-align: left;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 2;
+}
+
+.menu-btn span {
+    position: relative;
+    z-index: 3;
+}
+
+/* Vampyr Kırmızı Fırça Arka Planı (Aktif Buton) */
+.menu-btn.active {
+    color: #ffffff;
+}
+
+.menu-btn.active::before {
+    content: '';
+    position: absolute;
+    left: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 125%;
+    height: 95%;
+    background: linear-gradient(90deg, 
+        rgba(185, 28, 28, 0.95) 0%, 
+        rgba(153, 27, 27, 0.85) 50%, 
+        transparent 100%
+    );
+    clip-path: polygon(0% 10%, 15% 0%, 95% 12%, 100% 85%, 85% 100%, 0% 90%);
+    z-index: 1;
+    filter: drop-shadow(0 0 8px rgba(229, 9, 20, 0.6));
+}
+
+.bottom-hint {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    padding-top: 14px;
+}
+
+.btn-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #1f2937;
+    border: 1px solid #4b5563;
+    color: #22c55e;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.hint-text {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    color: #9ca3af;
+}
+
+/* ================= MODALLAR ================= */
+.modal {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.88);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+    display: none;
+    flex-direction: column;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-box {
+    width: 100%;
+    height: 100%;
+    padding: calc(env(safe-area-inset-top, 20px) + 20px) 20px calc(env(safe-area-inset-bottom, 20px) + 20px) 20px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.modal-header {
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    padding-bottom: 12px;
+}
+
+.back-btn {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #ffffff;
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.modal-header h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+    color: #ffffff;
+}
+
+/* ================= KARAKTERLER (SİYAH BEYAZ LED ŞERİT) ================= */
+.character-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-bottom: 30px;
+}
+
+/* Dönen Siyah-Beyaz LED Şerit */
+.char-card.led-strip {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    padding: 3px;
+    background: transparent;
+}
+
+.char-card.led-strip::before {
+    content: '';
+    position: absolute;
+    top: -60%;
+    left: -60%;
+    width: 220%;
+    height: 220%;
+    background: conic-gradient(
+        #ffffff 0deg 30deg,
+        #000000 30deg 60deg,
+        #ffffff 60deg 90deg,
+        #000000 90deg 120deg,
+        #ffffff 120deg 150deg,
+        #000000 150deg 180deg,
+        #ffffff 180deg 210deg,
+        #000000 210deg 240deg,
+        #ffffff 240deg 270deg,
+        #000000 270deg 300deg,
+        #ffffff 300deg 330deg,
+        #000000 330deg 360deg
+    );
+    animation: rotateLED 3.5s linear infinite;
+    z-index: 1;
+}
+
+@keyframes rotateLED {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.char-inner {
+    position: relative;
+    z-index: 2;
+    background: #0a0b0e;
+    border-radius: 9px;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.char-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 1px;
+}
+
+.char-pick-btn {
+    background: #e50914;
+    border: none;
+    color: #ffffff;
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* ================= DEVAM ET ================= */
+.content-box {
+    background: #0f1117;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.save-line {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-size: 0.9rem;
+}
+
+.save-line:last-child {
+    border-bottom: none;
+}
+
+.modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.action-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.red-btn {
+    background: #e50914;
+    border: none;
+    color: #fff;
+}
+
+.gray-btn {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #fff;
+}
+
+.outline-btn {
+    background: transparent;
+    border: 1px solid #ef4444;
+    color: #ef4444;
+}
+
+/* ================= AYARLAR ================= */
+.settings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: #0f1117;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+/* Toggle Switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 26px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    inset: 0;
+    background-color: #374151;
+    border-radius: 26px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.slider::before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+input:checked + .slider {
+    background-color: #e50914;
+}
+
+input:checked + .slider::before {
+    transform: translateX(22px);
+}
+
+.range-bar {
+    accent-color: #e50914;
+}
+
+/* ANTİ&G Productions Reklamı */
+.antig-signature {
+    margin-top: auto;
+    text-align: center;
+    padding: 24px 0 10px 0;
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    color: #6b7280;
+}
+
+/* ================= TÜM BÖLÜMLER ================= */
+.episodes-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.season-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    color: #e50914;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.episode-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #0f1117;
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 14px;
+    border-radius: 8px;
+}
+
+.episode-row.locked {
+    opacity: 0.65;
+}
+
+.ep-name {
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.ep-lock {
+    font-size: 0.8rem;
+    color: #f59e0b;
+    font-weight: 600;
+}
+
+/* ================= BİLDİRİM ================= */
+.toast {
+    position: absolute;
+    bottom: 70px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #111827;
+    border: 1px solid #e50914;
+    color: #ffffff;
+    font-size: 0.85rem;
+    padding: 8px 18px;
+    border-radius: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+    z-index: 200;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}

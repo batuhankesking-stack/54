@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('close-options-btn').addEventListener('click', () => closeModal(modalOptions));
     document.getElementById('close-credits-btn').addEventListener('click', () => closeModal(modalCredits));
 
-    // Menü Odaklanma (Kırmızı Fırça)
+    // Menü Aktifliği (Kırmızı Fırça)
     const menuButtons = [btnContinue, btnNewGame, btnOptions, btnCredits];
     function setFocus(btn) {
         menuButtons.forEach(b => b.classList.remove('active'));
@@ -47,15 +47,13 @@ document.addEventListener('DOMContentLoaded', () => {
         clearTimeout(toastTimeout);
         toastTimeout = setTimeout(() => {
             toast.classList.remove('show');
-        }, 2500);
+        }, 2200);
     }
 
     // ================= SAVE / LOAD SİSTEMİ =================
     const SAVE_KEY = '54_save';
     const saveContent = document.getElementById('save-content');
-    const resumeBtn = document.getElementById('resume-btn');
-    const testSaveBtn = document.getElementById('test-save-btn');
-    const clearSaveBtn = document.getElementById('clear-save-btn');
+    const saveActionsBox = document.getElementById('save-actions-box');
 
     function getSave() {
         try {
@@ -68,58 +66,54 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderSave() {
         const s = getSave();
         if (!s) {
-            saveContent.innerHTML = `<p style="color:#9ca3af; text-align:center;">Kayıtlı ilerleme yok.<br>"NEW GAME" ile başlayın.</p>`;
-            resumeBtn.style.opacity = '0.5';
-            resumeBtn.style.pointerEvents = 'none';
-        } else {
             saveContent.innerHTML = `
-                <div class="save-line">
-                    <span style="color:#9ca3af;">Karakter:</span>
-                    <strong style="color:#22c55e;">${s.char}</strong>
-                </div>
-                <div class="save-line">
-                    <span style="color:#9ca3af;">Durum:</span>
-                    <span>1. Sezon 1. Bölüm</span>
-                </div>
-                <div class="save-line">
-                    <span style="color:#9ca3af;">Son Kayıt:</span>
-                    <span style="color:#e50914;">${s.time}</span>
+                <div style="text-align:center; padding: 15px 0;">
+                    <p style="color:#9ca3af; font-size: 0.95rem; line-height: 1.5; margin-bottom: 15px;">
+                        Kayıtlı ilerleme bulunamadı.<br>Yeni bir oyun başlatmak için karakterini seç.
+                    </p>
                 </div>
             `;
-            resumeBtn.style.opacity = '1';
-            resumeBtn.style.pointerEvents = 'auto';
+            saveActionsBox.innerHTML = `
+                <button id="btn-start-from-continue" class="action-btn-red">YENİ OYUN BAŞLAT</button>
+            `;
+            document.getElementById('btn-start-from-continue').addEventListener('click', () => {
+                closeModal(modalContinue);
+                setFocus(btnNewGame);
+                openModal(modalChar);
+            });
+        } else {
+            saveContent.innerHTML = `
+                <div class="save-info-row">
+                    <span class="save-info-label">Karakter:</span>
+                    <span class="save-info-value" style="color:#e50914;">${s.char}</span>
+                </div>
+                <div class="save-info-row">
+                    <span class="save-info-label">Bölüm:</span>
+                    <span class="save-info-value">1. Sezon 1. Bölüm</span>
+                </div>
+                <div class="save-info-row">
+                    <span class="save-info-label">Son Kayıt:</span>
+                    <span class="save-info-value" style="color:#4ade80;">${s.time}</span>
+                </div>
+            `;
+            saveActionsBox.innerHTML = `
+                <button id="resume-btn" class="action-btn-red">DEVAM ET</button>
+            `;
+            document.getElementById('resume-btn').addEventListener('click', () => {
+                closeModal(modalContinue);
+                notify(`Oyun Yükleniyor: ${s.char}`);
+            });
         }
     }
 
-    // 1. CONTINUE (DEVAM ET)
+    // 1. DEVAM ET
     btnContinue.addEventListener('click', () => {
         setFocus(btnContinue);
         renderSave();
         openModal(modalContinue);
     });
 
-    resumeBtn.addEventListener('click', () => {
-        const s = getSave();
-        if (s) {
-            closeModal(modalContinue);
-            notify(`Oyun Açılıyor: ${s.char}`);
-        }
-    });
-
-    testSaveBtn.addEventListener('click', () => {
-        const now = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
-        localStorage.setItem(SAVE_KEY, JSON.stringify({ char: 'Batuhan Keskin', time: now }));
-        renderSave();
-        notify('Test kaydı alındı.');
-    });
-
-    clearSaveBtn.addEventListener('click', () => {
-        localStorage.removeItem(SAVE_KEY);
-        renderSave();
-        notify('Kayıt silindi.');
-    });
-
-    // 2. NEW GAME (KARAKTER SEÇİMİ)
+    // 2. YENİ OYUN (Karakter Seçimi)
     btnNewGame.addEventListener('click', () => {
         setFocus(btnNewGame);
         openModal(modalChar);
@@ -128,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.char-card').forEach(card => {
         const name = card.getAttribute('data-name');
         card.querySelector('.char-pick-btn').addEventListener('click', () => {
-            const now = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+            const now = new Date().toLocaleString('tr-TR', { dateStyle: 'short', timeStyle: 'short' });
             localStorage.setItem(SAVE_KEY, JSON.stringify({ char: name, time: now }));
             closeModal(modalChar);
             setFocus(btnContinue);
@@ -136,16 +130,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 3. OPTIONS (AYARLAR)
+    // 3. AYARLAR
     btnOptions.addEventListener('click', () => {
         setFocus(btnOptions);
         openModal(modalOptions);
     });
 
+    // Ses ve Parlaklık Kontrolleri
     const bgAudio = document.getElementById('bg-audio');
     const musicToggle = document.getElementById('music-toggle');
     const brightnessSlider = document.getElementById('brightness-slider');
     const brightnessLayer = document.getElementById('brightness-layer');
+
+    // Müzik Başlatma & Kontrol
+    bgAudio.volume = 0.6;
 
     musicToggle.addEventListener('change', (e) => {
         if (e.target.checked) {
@@ -157,13 +155,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // İlk kullanıcı dokunuşunda müzik başlatma
+    // İlk dokunuşta müziği başlat
     document.body.addEventListener('click', () => {
         if (musicToggle.checked && bgAudio.paused) {
             bgAudio.play().catch(() => {});
         }
     }, { once: true });
 
+    // Parlaklık Kontrolü
     brightnessSlider.addEventListener('input', (e) => {
         const val = parseInt(e.target.value);
         if (val < 100) {
@@ -171,15 +170,16 @@ document.addEventListener('DOMContentLoaded', () => {
             brightnessLayer.style.opacity = ((100 - val) / 100) * 0.8;
         } else {
             brightnessLayer.style.background = 'white';
-            brightnessLayer.style.opacity = ((val - 100) / 100) * 0.3;
+            brightnessLayer.style.opacity = ((val - 100) / 100) * 0.35;
         }
     });
 
-    // 4. CREDITS (BÖLÜMLER)
+    // 4. BÖLÜMLER
     btnCredits.addEventListener('click', () => {
         setFocus(btnCredits);
         openModal(modalCredits);
     });
 
+    // Sayfa Yüklenişi
     renderSave();
 });

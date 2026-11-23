@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>54</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800;900&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
 
@@ -17,10 +20,16 @@
     <!-- Mobil Dikey Görünüm -->
     <div class="mobile-container">
 
-        <!-- Arka Plan Görseli -->
+        <!-- Arka Plan Görseli & Atmosfer Efektleri -->
         <div class="bg-wrapper">
             <img src="assets/bg.jpg" alt="54" class="bg-img">
             <div class="vignette"></div>
+            
+            <!-- BMW Kırmızı Stop Lambası Nefes Alma Efekti -->
+            <div class="car-taillight-glow">
+                <div class="light-beam beam-left"></div>
+                <div class="light-beam beam-right"></div>
+            </div>
         </div>
 
         <!-- ================= ANA MENÜ ================= -->
@@ -31,21 +40,29 @@
                 <span class="num-5">5</span><span class="num-4">4</span>
             </div>
 
-            <!-- Menü Öğeleri (Türkçe) -->
+            <!-- Menü Öğeleri: DEVAM ET Sabit Kırmızı Fırçalı, Diğerleri Belirgin -->
             <nav class="vampyr-menu">
-                <button class="menu-btn active" id="btn-continue">
+                <button class="menu-btn continue-btn" id="btn-continue">
                     <span class="btn-text">DEVAM ET</span>
                 </button>
-                <button class="menu-btn" id="btn-new-game">
+                <button class="menu-btn standard-btn" id="btn-new-game">
                     <span class="btn-text">YENİ OYUN</span>
                 </button>
-                <button class="menu-btn" id="btn-options">
+                <button class="menu-btn standard-btn" id="btn-options">
                     <span class="btn-text">AYARLAR</span>
                 </button>
-                <button class="menu-btn" id="btn-credits">
+                <button class="menu-btn standard-btn" id="btn-credits">
                     <span class="btn-text">BÖLÜMLER</span>
                 </button>
             </nav>
+
+            <!-- Menünün Altında Beliren Racon / Dizi Cümlesi -->
+            <div class="racon-quote-box">
+                <div class="quote-line"></div>
+                <p class="quote-text">
+                    <span class="quote-mark">“</span>Her günün bir yarını var, bu dünyanın da ahireti var.<span class="quote-mark">”</span>
+                </p>
+            </div>
 
         </div>
 
@@ -187,12 +204,11 @@
 
     </div>
 
-    <!-- Ana Menü Müziği (54 mafya dizi klasöründeki ana menü müzik.mp3) -->
-    <audio id="bg-audio" loop preload="auto">
+    <!-- Ana Menü Müziği (Otomatik Başlatma Desteği) -->
+    <audio id="bg-audio" loop preload="auto" autoplay playsinline>
         <source src="music.mp3" type="audio/mpeg">
-        <source src="beat.mp3" type="audio/mpeg">
     </audio>
 
-    <script src="app.js"></script>
+    <script src="app.js?v=5"></script>
 </body>
 </html>

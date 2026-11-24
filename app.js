@@ -50,15 +50,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const brightnessSlider = document.getElementById('brightness-slider');
     const brightnessLayer = document.getElementById('brightness-layer');
 
-    // Ses Seviyeleri
+    // Ses Seviyeleri & Ayarlar
     bgAudio.volume = 0.70;
-    if (policeAudio) policeAudio.volume = 0.45;
+    bgAudio.loop = true; // Melodi sonsuza kadar döner
+
+    let policeHasPlayed = false;
+    if (policeAudio) {
+        policeAudio.volume = 0.50;
+        policeAudio.loop = false; // Polis sesi asla başa sarmaz, 1 kere çalar
+        policeAudio.addEventListener('ended', () => {
+            policeHasPlayed = true;
+        });
+    }
 
     function playAllSounds() {
         if (!musicToggle.checked) return;
         
         bgAudio.play().catch(() => {});
-        if (policeAudio) policeAudio.play().catch(() => {});
+        
+        // Polis sesi sadece 1 kere çalar
+        if (policeAudio && !policeHasPlayed && policeAudio.paused) {
+            policeAudio.play().catch(() => {});
+        }
     }
 
     // İlk deneme: Sayfa açılır açılmaz

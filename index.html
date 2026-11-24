@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:ital,wght@0,700;0,800;0,900;1,700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=7">
+    <link rel="stylesheet" href="style.css?v=8">
 </head>
 <body>
 
@@ -132,9 +132,9 @@
                 </div>
 
                 <div class="settings-list">
-                    <!-- Müzik & Sesler Aç / Kapat -->
+                    <!-- Sesler Aç / Kapat -->
                     <div class="setting-item">
-                        <span class="setting-label">Müzik & Telsiz</span>
+                        <span class="setting-label">Sesler</span>
                         <label class="switch">
                             <input type="checkbox" id="music-toggle" checked>
                             <span class="slider"></span>
@@ -204,11 +204,11 @@
         <source src="music.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Gerçek Polis Telsizi & Siren Sesi (Kullanıcının Eklediği Dosya) -->
-    <audio id="police-audio" loop preload="auto" playsinline>
+    <!-- Gerçek Polis Telsizi & Siren Sesi (Tek Seferlik Çalar) -->
+    <audio id="police-audio" preload="auto" playsinline>
         <source src="polis_sesleri.mp3" type="audio/mpeg">
     </audio>
 
-    <script src="app.js?v=7"></script>
+    <script src="app.js?v=8"></script>
 </body>
 </html>

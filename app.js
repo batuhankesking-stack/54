@@ -225,19 +225,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const trailerVideo = document.getElementById('trailer-video');
 
     if (btnOpenTrailer && modalTrailer && trailerVideo) {
-        btnOpenTrailer.addEventListener('click', () => {
+        btnOpenTrailer.addEventListener('click', (e) => {
+            if (e) e.stopPropagation();
             // Fragman başladığında arka plan müziğini durdur
             bgAudio.pause();
             if (policeAudio) policeAudio.pause();
 
-            openModal(modalTrailer);
+            modalTrailer.classList.add('active');
             trailerVideo.currentTime = 0;
-            trailerVideo.play().catch(() => {});
+            const p = trailerVideo.play();
+            if (p !== undefined) {
+                p.catch(() => {
+                    // Kullanıcı kontrollerden de basabilir
+                });
+            }
         });
 
-        function closeTrailerPlayer() {
+        function closeTrailerPlayer(e) {
+            if (e) e.stopPropagation();
             trailerVideo.pause();
-            closeModal(modalTrailer);
+            modalTrailer.classList.remove('active');
             // Fragman kapanınca arka plan müziğini geri aç
             if (musicToggle.checked) {
                 bgAudio.play().catch(() => {});

@@ -578,14 +578,17 @@ input:checked + .slider::before {
 
 /* ================= 54 TRAILER KARTI ================= */
 .trailer-card {
-    background: linear-gradient(135deg, rgba(25, 14, 18, 0.95) 0%, rgba(12, 13, 18, 0.95) 100%);
+    background: linear-gradient(135deg, rgba(30, 15, 20, 0.95) 0%, rgba(14, 15, 20, 0.95) 100%);
     border: 1.5px solid #e50914;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8), 0 0 15px rgba(229, 9, 20, 0.35);
     border-radius: 10px;
-    padding: 16px;
-    margin-bottom: 8px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
     cursor: pointer;
+    text-align: left;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    z-index: 50;
+    pointer-events: auto;
 }
 
 .trailer-card:active {
@@ -593,62 +596,50 @@ input:checked + .slider::before {
     box-shadow: 0 2px 10px rgba(229, 9, 20, 0.6);
 }
 
-.trailer-top-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 6px;
-}
-
-.trailer-badge {
-    background: #e50914;
-    color: #ffffff;
-    font-size: 0.7rem;
-    font-weight: 800;
-    letter-spacing: 2px;
-    padding: 3px 8px;
-    border-radius: 4px;
-}
-
-.trailer-dur {
-    font-size: 0.75rem;
-    color: #9aa0b0;
-    font-weight: 600;
-}
-
 .trailer-name {
     font-family: 'Cinzel', serif;
-    font-size: 1.15rem;
+    font-size: 1.25rem;
     font-weight: 800;
     color: #ffffff;
-    letter-spacing: 1.5px;
-    margin-bottom: 6px;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
 }
 
 .trailer-action {
-    font-size: 0.8rem;
-    font-weight: 700;
+    font-size: 0.85rem;
+    font-weight: 600;
     color: #ff3844;
     letter-spacing: 1.5px;
 }
 
-/* ================= TRAILER VİDEO OYNATICI MODAL ================= */
-.video-modal {
-    background: rgba(0, 0, 0, 0.96);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
+/* ================= TRAILER VİDEO OYNATICI (TAM EKRAN SABİT) ================= */
+.video-modal-fullscreen {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: rgba(0, 0, 0, 0.96) !important;
+    backdrop-filter: blur(25px) !important;
+    -webkit-backdrop-filter: blur(25px) !important;
+    z-index: 999999 !important;
+    display: none;
     justify-content: center;
     align-items: center;
     padding: 0;
 }
 
+.video-modal-fullscreen.active {
+    display: flex !important;
+}
+
 .video-modal-box {
     width: 100%;
+    max-width: 500px;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: calc(env(safe-area-inset-top, 20px) + 10px) 16px calc(env(safe-area-inset-bottom, 20px) + 10px) 16px;
+    padding: calc(env(safe-area-inset-top, 20px) + 12px) 16px calc(env(safe-area-inset-bottom, 20px) + 12px) 16px;
 }
 
 .video-nav-bar {
@@ -660,21 +651,21 @@ input:checked + .slider::before {
 
 .video-title {
     font-family: 'Cinzel', serif;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 800;
-    letter-spacing: 1.5px;
+    letter-spacing: 2px;
     color: #ffffff;
 }
 
 .close-video-btn {
-    background: rgba(229, 9, 20, 0.2);
+    background: rgba(229, 9, 20, 0.25);
     border: 1px solid #e50914;
     color: #ffffff;
     font-family: 'Cinzel', serif;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     font-weight: 800;
     letter-spacing: 1.5px;
-    padding: 6px 14px;
+    padding: 7px 16px;
     border-radius: 6px;
     cursor: pointer;
     transition: background 0.2s;
@@ -687,14 +678,13 @@ input:checked + .slider::before {
 .video-wrapper {
     position: relative;
     width: 100%;
-    max-height: 80vh;
     display: flex;
     justify-content: center;
     align-items: center;
     background: #000000;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 8px 35px rgba(0, 0, 0, 0.9), 0 0 20px rgba(229, 9, 20, 0.2);
+    box-shadow: 0 8px 35px rgba(0, 0, 0, 0.95), 0 0 20px rgba(229, 9, 20, 0.3);
 }
 
 .video-wrapper video {
@@ -703,6 +693,7 @@ input:checked + .slider::before {
     max-height: 75vh;
     object-fit: contain;
     outline: none;
+    display: block;
 }
 
 /* ================= BİLDİRİM ================= */

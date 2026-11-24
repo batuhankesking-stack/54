@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:ital,wght@0,700;0,800;0,900;1,700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=8">
+    <link rel="stylesheet" href="style.css?v=9">
 </head>
 <body>
 
@@ -164,6 +164,16 @@
                 </div>
 
                 <div class="episodes-wrap">
+                    <!-- 54 TRAILER / SAKARYA TANITIM (TIKLANABİLİR & AÇIK) -->
+                    <div class="trailer-card" id="btn-open-trailer">
+                        <div class="trailer-top-row">
+                            <span class="trailer-badge">FRAGMAN</span>
+                            <span class="trailer-dur">⏱ 0:56</span>
+                        </div>
+                        <div class="trailer-name">54 | SAKARYA TRAILER</div>
+                        <div class="trailer-action">▶ İZLEMEK İÇİN DOKUN</div>
+                    </div>
+
                     <div class="season-badge">1. SEZON</div>
 
                     <div class="episode-row">
@@ -194,6 +204,21 @@
             </div>
         </div>
 
+        <!-- ================= TRAILER VİDEO MODALI ================= -->
+        <div id="modal-trailer" class="modal video-modal">
+            <div class="video-modal-box">
+                <div class="video-nav-bar">
+                    <span class="video-title">54 | SAKARYA TRAILER</span>
+                    <button class="close-video-btn" id="close-trailer-btn">✕ KAPAT</button>
+                </div>
+                <div class="video-wrapper">
+                    <video id="trailer-video" playsinline controls preload="metadata">
+                        <source src="trailer.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </div>
+
         <!-- Bildirim Toast -->
         <div id="toast" class="toast"></div>
 
@@ -209,6 +234,6 @@
         <source src="polis_sesleri.mp3" type="audio/mpeg">
     </audio>
 
-    <script src="app.js?v=8"></script>
+    <script src="app.js?v=9"></script>
 </body>
 </html>

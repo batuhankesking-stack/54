@@ -576,6 +576,135 @@ input:checked + .slider::before {
     letter-spacing: 1px;
 }
 
+/* ================= 54 TRAILER KARTI ================= */
+.trailer-card {
+    background: linear-gradient(135deg, rgba(25, 14, 18, 0.95) 0%, rgba(12, 13, 18, 0.95) 100%);
+    border: 1.5px solid #e50914;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8), 0 0 15px rgba(229, 9, 20, 0.35);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.trailer-card:active {
+    transform: scale(0.985);
+    box-shadow: 0 2px 10px rgba(229, 9, 20, 0.6);
+}
+
+.trailer-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.trailer-badge {
+    background: #e50914;
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+.trailer-dur {
+    font-size: 0.75rem;
+    color: #9aa0b0;
+    font-weight: 600;
+}
+
+.trailer-name {
+    font-family: 'Cinzel', serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: 1.5px;
+    margin-bottom: 6px;
+}
+
+.trailer-action {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #ff3844;
+    letter-spacing: 1.5px;
+}
+
+/* ================= TRAILER VİDEO OYNATICI MODAL ================= */
+.video-modal {
+    background: rgba(0, 0, 0, 0.96);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+
+.video-modal-box {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: calc(env(safe-area-inset-top, 20px) + 10px) 16px calc(env(safe-area-inset-bottom, 20px) + 10px) 16px;
+}
+
+.video-nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.video-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: #ffffff;
+}
+
+.close-video-btn {
+    background: rgba(229, 9, 20, 0.2);
+    border: 1px solid #e50914;
+    color: #ffffff;
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.close-video-btn:active {
+    background: #e50914;
+}
+
+.video-wrapper {
+    position: relative;
+    width: 100%;
+    max-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #000000;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 35px rgba(0, 0, 0, 0.9), 0 0 20px rgba(229, 9, 20, 0.2);
+}
+
+.video-wrapper video {
+    width: 100%;
+    height: auto;
+    max-height: 75vh;
+    object-fit: contain;
+    outline: none;
+}
+
 /* ================= BİLDİRİM ================= */
 .toast {
     position: absolute;

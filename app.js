@@ -218,6 +218,39 @@ document.addEventListener('DOMContentLoaded', () => {
         openModal(modalCredits);
     });
 
+    // ================= 54 TRAILER / FRAGMAN OYNATICI =================
+    const btnOpenTrailer = document.getElementById('btn-open-trailer');
+    const modalTrailer = document.getElementById('modal-trailer');
+    const closeTrailerBtn = document.getElementById('close-trailer-btn');
+    const trailerVideo = document.getElementById('trailer-video');
+
+    if (btnOpenTrailer && modalTrailer && trailerVideo) {
+        btnOpenTrailer.addEventListener('click', () => {
+            // Fragman başladığında arka plan müziğini durdur
+            bgAudio.pause();
+            if (policeAudio) policeAudio.pause();
+
+            openModal(modalTrailer);
+            trailerVideo.currentTime = 0;
+            trailerVideo.play().catch(() => {});
+        });
+
+        function closeTrailerPlayer() {
+            trailerVideo.pause();
+            closeModal(modalTrailer);
+            // Fragman kapanınca arka plan müziğini geri aç
+            if (musicToggle.checked) {
+                bgAudio.play().catch(() => {});
+            }
+        }
+
+        if (closeTrailerBtn) {
+            closeTrailerBtn.addEventListener('click', closeTrailerPlayer);
+        }
+
+        trailerVideo.addEventListener('ended', closeTrailerPlayer);
+    }
+
     // Başlangıç Yüklemesi
     renderSave();
 });

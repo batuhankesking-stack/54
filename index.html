@@ -9,22 +9,13 @@
     <title>54</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800;900&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=6">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:ital,wght@0,700;0,800;0,900;1,700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
 
     <!-- Parlaklık Katmanı -->
     <div id="brightness-layer"></div>
-
-    <!-- Chrome Otomatik Müzik Açma Perdesi (Sadece engellenirse görünür) -->
-    <div id="audio-start-curtain" class="audio-curtain hidden">
-        <div class="curtain-content">
-            <div class="curtain-logo"><span class="num-5">5</span><span class="num-4">4</span></div>
-            <div class="curtain-sub">SAKARYA RACONU</div>
-            <button class="curtain-tap-btn">GİRİŞ YAPMAK İÇİN DOKUN</button>
-        </div>
-    </div>
 
     <!-- Mobil Dikey Görünüm -->
     <div class="mobile-container">
@@ -44,7 +35,7 @@
                 <span class="num-5">5</span><span class="num-4">4</span>
             </div>
 
-            <!-- Menü Öğeleri: Ağır Mafya Stili -->
+            <!-- Menü Öğeleri: DEVAM ET Sabit Kırmızı, Diğerleri Net -->
             <nav class="vampyr-menu">
                 <button class="menu-btn continue-btn" id="btn-continue">
                     <span class="btn-text">DEVAM ET</span>
@@ -60,11 +51,11 @@
                 </button>
             </nav>
 
-            <!-- Menünün Altında Beliren Racon Cümlesi -->
+            <!-- Menünün Altındaki Racon Sözü (Dengeli 2 Satır, 'da' Düzeltildi) -->
             <div class="racon-quote-box">
                 <div class="quote-line"></div>
                 <p class="quote-text">
-                    <span class="quote-mark">“</span>Her günün bir yarını var, bu dünyanın da ahireti var.<span class="quote-mark">”</span>
+                    <span class="quote-mark">“</span>Her günün bir yarını var,<br>bu dünyanın da ahireti var.<span class="quote-mark">”</span>
                 </p>
             </div>
 
@@ -141,9 +132,9 @@
                 </div>
 
                 <div class="settings-list">
-                    <!-- Müzik Aç / Kapat -->
+                    <!-- Müzik & Sesler Aç / Kapat -->
                     <div class="setting-item">
-                        <span class="setting-label">Müzik</span>
+                        <span class="setting-label">Müzik & Telsiz</span>
                         <label class="switch">
                             <input type="checkbox" id="music-toggle" checked>
                             <span class="slider"></span>
@@ -209,10 +200,15 @@
     </div>
 
     <!-- Ana Menü Müziği -->
-    <audio id="bg-audio" loop preload="auto" autoplay playsinline>
+    <audio id="bg-audio" loop preload="auto" playsinline>
         <source src="music.mp3" type="audio/mpeg">
     </audio>
 
-    <script src="app.js?v=6"></script>
+    <!-- Gerçek Polis Telsizi & Siren Sesi (Kullanıcının Eklediği Dosya) -->
+    <audio id="police-audio" loop preload="auto" playsinline>
+        <source src="polis_sesleri.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="app.js?v=7"></script>
 </body>
 </html>

@@ -10,29 +10,33 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800;900&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=5">
+    <link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
 
     <!-- Parlaklık Katmanı -->
     <div id="brightness-layer"></div>
 
+    <!-- Chrome Otomatik Müzik Açma Perdesi (Sadece engellenirse görünür) -->
+    <div id="audio-start-curtain" class="audio-curtain hidden">
+        <div class="curtain-content">
+            <div class="curtain-logo"><span class="num-5">5</span><span class="num-4">4</span></div>
+            <div class="curtain-sub">SAKARYA RACONU</div>
+            <button class="curtain-tap-btn">GİRİŞ YAPMAK İÇİN DOKUN</button>
+        </div>
+    </div>
+
     <!-- Mobil Dikey Görünüm -->
     <div class="mobile-container">
 
-        <!-- Arka Plan Görseli & Atmosfer Efektleri -->
+        <!-- Arka Plan Görseli (4 Tabutlu Karanlık Oda) -->
         <div class="bg-wrapper">
             <img src="assets/bg.jpg" alt="54" class="bg-img">
             <div class="vignette"></div>
-            
-            <!-- BMW Kırmızı Stop Lambası Nefes Alma Efekti -->
-            <div class="car-taillight-glow">
-                <div class="light-beam beam-left"></div>
-                <div class="light-beam beam-right"></div>
-            </div>
+            <div class="smoke-ambient"></div>
         </div>
 
-        <!-- ================= ANA MENÜ ================= -->
+        <!-- ================= ANA MENÜ (AĞIR MAFYA TEMASI) ================= -->
         <div id="screen-main" class="screen">
             
             <!-- 54 Başlığı: 5 Kırmızı, 4 Beyaz -->
@@ -40,7 +44,7 @@
                 <span class="num-5">5</span><span class="num-4">4</span>
             </div>
 
-            <!-- Menü Öğeleri: DEVAM ET Sabit Kırmızı Fırçalı, Diğerleri Belirgin -->
+            <!-- Menü Öğeleri: Ağır Mafya Stili -->
             <nav class="vampyr-menu">
                 <button class="menu-btn continue-btn" id="btn-continue">
                     <span class="btn-text">DEVAM ET</span>
@@ -56,7 +60,7 @@
                 </button>
             </nav>
 
-            <!-- Menünün Altında Beliren Racon / Dizi Cümlesi -->
+            <!-- Menünün Altında Beliren Racon Cümlesi -->
             <div class="racon-quote-box">
                 <div class="quote-line"></div>
                 <p class="quote-text">
@@ -204,11 +208,11 @@
 
     </div>
 
-    <!-- Ana Menü Müziği (Otomatik Başlatma Desteği) -->
+    <!-- Ana Menü Müziği -->
     <audio id="bg-audio" loop preload="auto" autoplay playsinline>
         <source src="music.mp3" type="audio/mpeg">
     </audio>
 
-    <script src="app.js?v=5"></script>
+    <script src="app.js?v=6"></script>
 </body>
 </html>

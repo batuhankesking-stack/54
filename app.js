@@ -48,10 +48,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const musicToggle = document.getElementById('music-toggle');
     const brightnessSlider = document.getElementById('brightness-slider');
     const brightnessLayer = document.getElementById('brightness-layer');
+    const audioCurtain = document.getElementById('audio-start-curtain');
 
-    bgAudio.volume = 0.65;
+    bgAudio.volume = 0.75;
 
-    // --- DERİNDEN GELEN TELSİZ CIZIRTISI VE GÖK GÜRÜLTÜSÜ SİSTEMİ (Web Audio) ---
+    // --- DERİNDEN GELEN POLİS TELSİZİ, SİREN VE GÖK GÜRÜLTÜSÜ SİSTEMİ (Web Audio) ---
     let ambientAudioCtx = null;
     let ambientTimer = null;
 
@@ -65,17 +66,100 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Derinden gelen gök gürültüsü uğultusu
+    // Uzaktan gelen polis sireni (dalgalı çift ton)
+    function playDistantSiren() {
+        if (!musicToggle.checked || !ambientAudioCtx) return;
+        try {
+            const now = ambientAudioCtx.currentTime;
+            const osc = ambientAudioCtx.createOscillator();
+            const gain = ambientAudioCtx.createGain();
+            const filter = ambientAudioCtx.createBiquadFilter();
+
+            osc.type = 'sawtooth';
+            // İki ton arasında dalgalanma (Siren)
+            osc.frequency.setValueAtTime(520, now);
+            osc.frequency.linearRampToValueAtTime(740, now + 1.2);
+            osc.frequency.linearRampToValueAtTime(520, now + 2.4);
+            osc.frequency.linearRampToValueAtTime(740, now + 3.6);
+            osc.frequency.linearRampToValueAtTime(500, now + 4.8);
+
+            // Uzaktan gelmesi için boğuk filtre
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(650, now);
+
+            gain.gain.setValueAtTime(0.001, now);
+            gain.gain.exponentialRampToValueAtTime(0.18, now + 1.0);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 4.8);
+
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(ambientAudioCtx.destination);
+
+            osc.start(now);
+            osc.stop(now + 4.8);
+        } catch (e) {}
+    }
+
+    // Telsiz bip/anons sesi (Motorola polis telsizi sesi)
+    function playRadioSquelch() {
+        if (!musicToggle.checked || !ambientAudioCtx) return;
+        try {
+            const now = ambientAudioCtx.currentTime;
+
+            // 1. Telsiz açılış bip sesi (chirp)
+            const beep = ambientAudioCtx.createOscillator();
+            const beepGain = ambientAudioCtx.createGain();
+            beep.type = 'sine';
+            beep.frequency.setValueAtTime(920, now);
+            beep.frequency.setValueAtTime(1150, now + 0.04);
+            beepGain.gain.setValueAtTime(0.15, now);
+            beepGain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+            beep.connect(beepGain);
+            beepGain.connect(ambientAudioCtx.destination);
+            beep.start(now);
+            beep.stop(now + 0.08);
+
+            // 2. Telsiz hışırtısı / parazit
+            const duration = 0.35;
+            const bufferSize = ambientAudioCtx.sampleRate * duration;
+            const buffer = ambientAudioCtx.createBuffer(1, bufferSize, ambientAudioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = (Math.random() * 2 - 1) * 0.9;
+            }
+
+            const noise = ambientAudioCtx.createBufferSource();
+            noise.buffer = buffer;
+
+            const bandpass = ambientAudioCtx.createBiquadFilter();
+            bandpass.type = 'bandpass';
+            bandpass.frequency.setValueAtTime(1750, now);
+            bandpass.Q.setValueAtTime(3.2, now);
+
+            const gain = ambientAudioCtx.createGain();
+            gain.gain.setValueAtTime(0.28, now + 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+            noise.connect(bandpass);
+            bandpass.connect(gain);
+            gain.connect(ambientAudioCtx.destination);
+
+            noise.start(now + 0.05);
+        } catch (e) {}
+    }
+
+    // Derinden gelen gök gürültüsü
     function playDistantThunder() {
         if (!musicToggle.checked || !ambientAudioCtx) return;
         try {
-            const bufferSize = ambientAudioCtx.sampleRate * 3.5;
+            const now = ambientAudioCtx.currentTime;
+            const bufferSize = ambientAudioCtx.sampleRate * 4.0;
             const buffer = ambientAudioCtx.createBuffer(1, bufferSize, ambientAudioCtx.sampleRate);
             const data = buffer.getChannelData(0);
             let lastOut = 0.0;
             for (let i = 0; i < bufferSize; i++) {
                 const white = Math.random() * 2 - 1;
-                data[i] = (lastOut + (0.02 * white)) / 1.02; // Brown noise
+                data[i] = (lastOut + (0.025 * white)) / 1.02;
                 lastOut = data[i];
             }
 
@@ -84,15 +168,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const filter = ambientAudioCtx.createBiquadFilter();
             filter.type = 'lowpass';
-            filter.frequency.setValueAtTime(60, ambientAudioCtx.currentTime);
-            filter.frequency.exponentialRampToValueAtTime(110, ambientAudioCtx.currentTime + 1.2);
-            filter.frequency.exponentialRampToValueAtTime(45, ambientAudioCtx.currentTime + 3.4);
+            filter.frequency.setValueAtTime(70, now);
+            filter.frequency.exponentialRampToValueAtTime(130, now + 1.2);
+            filter.frequency.exponentialRampToValueAtTime(40, now + 3.8);
 
             const gain = ambientAudioCtx.createGain();
-            const now = ambientAudioCtx.currentTime;
             gain.gain.setValueAtTime(0.001, now);
-            gain.gain.exponentialRampToValueAtTime(0.12, now + 1.0);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 3.4);
+            gain.gain.exponentialRampToValueAtTime(0.25, now + 1.0);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 3.8);
 
             noise.connect(filter);
             filter.connect(gain);
@@ -102,77 +185,63 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (e) {}
     }
 
-    // Polis telsizi cızırtısı / anons hışırtısı
-    function playRadioSquelch() {
-        if (!musicToggle.checked || !ambientAudioCtx) return;
-        try {
-            const duration = 0.22;
-            const bufferSize = ambientAudioCtx.sampleRate * duration;
-            const buffer = ambientAudioCtx.createBuffer(1, bufferSize, ambientAudioCtx.sampleRate);
-            const data = buffer.getChannelData(0);
-            for (let i = 0; i < bufferSize; i++) {
-                data[i] = (Math.random() * 2 - 1) * 0.7;
-            }
-
-            const noise = ambientAudioCtx.createBufferSource();
-            noise.buffer = buffer;
-
-            const bandpass = ambientAudioCtx.createBiquadFilter();
-            bandpass.type = 'bandpass';
-            bandpass.frequency.setValueAtTime(1850, ambientAudioCtx.currentTime);
-            bandpass.Q.setValueAtTime(3.8, ambientAudioCtx.currentTime);
-
-            const gain = ambientAudioCtx.createGain();
-            const now = ambientAudioCtx.currentTime;
-            gain.gain.setValueAtTime(0.07, now);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-
-            noise.connect(bandpass);
-            bandpass.connect(gain);
-            gain.connect(ambientAudioCtx.destination);
-
-            noise.start(now);
-        } catch (e) {}
-    }
-
-    // Rastgele aralıklarla gök gürültüsü ve telsiz sesleri çal
+    // Ortam seslerini döngüye sok (10-12 saniyede bir telsiz/polis sireni/gök gürültüsü)
     function startAmbientAtmosphere() {
         clearInterval(ambientTimer);
         ambientTimer = setInterval(() => {
             if (!musicToggle.checked) return;
             const roll = Math.random();
-            if (roll < 0.45) {
-                playDistantThunder();
-            } else if (roll < 0.85) {
-                playRadioSquelch();
+            if (roll < 0.4) {
+                playRadioSquelch(); // Telsiz
+            } else if (roll < 0.75) {
+                playDistantSiren(); // Polis Sireni
+            } else {
+                playDistantThunder(); // Gök Gürültüsü
             }
-        }, 14000); // 14 saniyede bir atmosfer efekti
+        }, 9000);
     }
 
-    // Sayfa açılır açılmaz müziği başlatmayı dene
-    function tryAutoplayMusic() {
-        if (!musicToggle.checked) return;
+    // --- MÜZİK OTOMATİK BAŞLATMA (CHROME VE MOBİL İÇİN KESİN ÇÖZÜM) ---
+    function unlockAndPlayAudio() {
         initAmbientSoundEngine();
         startAmbientAtmosphere();
-
-        const playPromise = bgAudio.play();
-        if (playPromise !== undefined) {
-            playPromise.catch(() => {
-                const startOnFirstGesture = () => {
-                    initAmbientSoundEngine();
-                    startAmbientAtmosphere();
-                    if (musicToggle.checked && bgAudio.paused) {
-                        bgAudio.play().catch(() => {});
-                    }
-                    window.removeEventListener('pointerdown', startOnFirstGesture);
-                    window.removeEventListener('touchstart', startOnFirstGesture);
-                    window.removeEventListener('click', startOnFirstGesture);
-                };
-                window.addEventListener('pointerdown', startOnFirstGesture, { once: true });
-                window.addEventListener('touchstart', startOnFirstGesture, { once: true });
-                window.addEventListener('click', startOnFirstGesture, { once: true });
+        if (musicToggle.checked) {
+            bgAudio.play().then(() => {
+                // Müzik başladıysa perdeyi kaldır
+                if (audioCurtain) audioCurtain.classList.add('hidden');
+            }).catch(() => {
+                // Eğer engellendiyse perdeyi göster
+                if (audioCurtain) audioCurtain.classList.remove('hidden');
             });
         }
+    }
+
+    // İlk deneme: Sayfa açılır açılmaz
+    unlockAndPlayAudio();
+
+    // 500ms ve 1000ms sonra tekrar dene
+    setTimeout(unlockAndPlayAudio, 400);
+    setTimeout(unlockAndPlayAudio, 1000);
+
+    // Ekrana dokunma perdesi veya herhangi bir yere ilk dokunuş
+    const startAudioOnTouch = () => {
+        initAmbientSoundEngine();
+        startAmbientAtmosphere();
+        if (musicToggle.checked && bgAudio.paused) {
+            bgAudio.play().catch(() => {});
+        }
+        if (audioCurtain) audioCurtain.classList.add('hidden');
+        window.removeEventListener('pointerdown', startAudioOnTouch);
+        window.removeEventListener('touchstart', startAudioOnTouch);
+        window.removeEventListener('click', startAudioOnTouch);
+    };
+
+    window.addEventListener('pointerdown', startAudioOnTouch);
+    window.addEventListener('touchstart', startAudioOnTouch);
+    window.addEventListener('click', startAudioOnTouch);
+
+    if (audioCurtain) {
+        audioCurtain.addEventListener('click', startAudioOnTouch);
     }
 
     tryAutoplayMusic();

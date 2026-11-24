@@ -1,7 +1,7 @@
 /* ==========================================================
    54 | MAFYA DİZİ OYUNU
-   Profesyonel Dikey Mobil Oyun Arayüzü
-   ANTİ&G Productions
+   Ağır Mafya Temalı Dikey Mobil Arayüz
+   ANTİ&G Productions © 2026
    ========================================================== */
 
 * {
@@ -33,7 +33,70 @@ body, html {
     transition: opacity 0.15s ease;
 }
 
-/* Mobil Dikey Görünüm (Tam Ekran & Orantılı) */
+/* Chrome Ses Açma Perdesi (Sadece engellenirse devreye girer) */
+.audio-curtain {
+    position: fixed;
+    inset: 0;
+    background: rgba(3, 4, 7, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.audio-curtain.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.curtain-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    text-align: center;
+}
+
+.curtain-logo {
+    font-family: 'Cinzel', serif;
+    font-size: 5rem;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.curtain-sub {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    letter-spacing: 4px;
+    color: #a0a6b5;
+    margin-bottom: 12px;
+}
+
+.curtain-tap-btn {
+    background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%);
+    border: 1px solid #ef4444;
+    color: #ffffff;
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    padding: 14px 28px;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 25px rgba(220, 38, 38, 0.6);
+    animation: curtainPulse 2s infinite alternate;
+}
+
+@keyframes curtainPulse {
+    0% { transform: scale(0.98); box-shadow: 0 4px 18px rgba(220, 38, 38, 0.4); }
+    100% { transform: scale(1.03); box-shadow: 0 4px 30px rgba(220, 38, 38, 0.85); }
+}
+
+/* Mobil Dikey Görünüm (9:16 Orantılı) */
 .mobile-container {
     position: relative;
     width: 100%;
@@ -45,7 +108,7 @@ body, html {
     box-shadow: 0 0 60px rgba(0,0,0,0.95);
 }
 
-/* Arka Plan Görseli */
+/* Arka Plan Görseli (4 Tabutlu Karanlık Oda) */
 .bg-wrapper {
     position: absolute;
     inset: 0;
@@ -56,19 +119,26 @@ body, html {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center 25%;
-    filter: brightness(0.9) contrast(1.1);
+    object-position: center center;
+    filter: brightness(0.85) contrast(1.1);
 }
 
 .vignette {
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at 40% 40%, transparent 25%, rgba(3,4,6,0.65) 75%, rgba(0,0,0,0.95) 100%),
-                linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 40%),
-                linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 40%, transparent 75%);
+    background: radial-gradient(circle at 40% 45%, transparent 30%, rgba(3,4,6,0.55) 70%, rgba(2,3,5,0.95) 100%),
+                linear-gradient(to top, rgba(2,3,5,0.95) 0%, transparent 40%),
+                linear-gradient(to right, rgba(2,3,5,0.85) 0%, rgba(2,3,5,0.3) 45%, transparent 80%);
 }
 
-/* ================= ANA MENÜ ================= */
+.smoke-ambient {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at bottom left, rgba(229, 9, 20, 0.05) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+/* ================= ANA MENÜ (AĞIR MAFYA STİLİ) ================= */
 .screen {
     position: relative;
     z-index: 10;
@@ -77,7 +147,7 @@ body, html {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    padding: calc(env(safe-area-inset-top, 24px) + 24px) 24px calc(env(safe-area-inset-bottom, 24px) + 24px) 24px;
+    padding: calc(env(safe-area-inset-top, 24px) + 20px) 24px calc(env(safe-area-inset-bottom, 24px) + 20px) 24px;
 }
 
 /* 54 Logosu */
@@ -88,8 +158,8 @@ body, html {
     line-height: 0.95;
     letter-spacing: 3px;
     margin-top: 10px;
-    margin-bottom: 45px;
-    filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.9));
+    margin-bottom: 40px;
+    filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.95));
 }
 
 .num-5 {
@@ -102,11 +172,11 @@ body, html {
     text-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
 }
 
-/* Vampyr Menü Listesi */
+/* Menü Butonları */
 .vampyr-menu {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 16px;
     width: 100%;
     max-width: 290px;
 }
@@ -123,7 +193,7 @@ body, html {
     text-align: left;
     padding: 12px 18px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.22s ease;
     z-index: 2;
 }
 
@@ -133,45 +203,46 @@ body, html {
     transition: transform 0.2s ease, color 0.2s ease;
 }
 
-/* DEVAM ET: SABİT KIRMIZI FIRÇA VURGUSU */
+/* DEVAM ET: AĞIR MAFYA KIRMIZISI (Korku kanı değil, lüks kırmızı kadife/çelik) */
 .menu-btn.continue-btn {
     color: #ffffff;
 }
 
 .menu-btn.continue-btn .btn-text {
     color: #ffffff;
-    text-shadow: 0 0 12px rgba(255, 255, 255, 0.7);
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.65);
     transform: translateX(4px);
 }
 
 .menu-btn.continue-btn::before {
     content: '';
     position: absolute;
-    left: -14px;
+    left: -12px;
     top: 50%;
     transform: translateY(-50%);
-    width: 130%;
-    height: 100%;
+    width: 125%;
+    height: 96%;
     background: linear-gradient(90deg, 
-        rgba(195, 18, 28, 0.98) 0%, 
-        rgba(155, 20, 28, 0.88) 55%, 
-        rgba(195, 18, 28, 0.25) 85%, 
+        rgba(185, 28, 28, 0.95) 0%, 
+        rgba(130, 20, 20, 0.85) 55%, 
+        rgba(185, 28, 28, 0.25) 85%, 
         transparent 100%
     );
-    clip-path: polygon(0% 12%, 12% 0%, 95% 8%, 100% 86%, 88% 100%, 0% 92%);
+    border-left: 3px solid #ff3344;
+    border-radius: 4px;
     z-index: 1;
-    filter: drop-shadow(0 4px 14px rgba(229, 9, 20, 0.65));
-    animation: brushGlow 2.5s ease-in-out infinite alternate;
+    filter: drop-shadow(0 4px 14px rgba(185, 28, 28, 0.55));
+    animation: mafiaPulse 3s ease-in-out infinite alternate;
 }
 
-@keyframes brushGlow {
-    0% { filter: drop-shadow(0 3px 10px rgba(229, 9, 20, 0.55)); }
-    100% { filter: drop-shadow(0 5px 18px rgba(229, 9, 20, 0.85)); }
+@keyframes mafiaPulse {
+    0% { filter: drop-shadow(0 2px 10px rgba(185, 28, 28, 0.45)); }
+    100% { filter: drop-shadow(0 4px 18px rgba(220, 38, 38, 0.75)); }
 }
 
-/* DİĞER BUTONLAR: NET, BELİRGİN VE ŞIK */
+/* DİĞER BUTONLAR: GÜMÜŞ/BEYAZ, BELİRGİN VE OTORİTER */
 .menu-btn.standard-btn {
-    color: #e5e7eb;
+    color: #e2e5ec;
 }
 
 .menu-btn.standard-btn .btn-text {
@@ -181,62 +252,17 @@ body, html {
 .menu-btn.standard-btn:hover,
 .menu-btn.standard-btn:active {
     color: #ffffff;
-    transform: translateX(4px);
+    transform: translateX(5px);
 }
 
 .menu-btn.standard-btn:active .btn-text {
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
-}
-
-/* ================= BMW STOP LAMBASI NEFES ALMA EFEKTİ ================= */
-.car-taillight-glow {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 2;
-}
-
-.light-beam {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(5px);
-    background: radial-gradient(circle, rgba(255, 30, 45, 0.95) 0%, rgba(229, 9, 20, 0.6) 45%, transparent 80%);
-    animation: tailLightBreathe 3.5s ease-in-out infinite;
-}
-
-.beam-left {
-    left: 0%;
-    top: 59.5%;
-    width: 32px;
-    height: 16px;
-    box-shadow: 0 0 20px rgba(255, 0, 20, 0.9), 0 0 45px rgba(229, 9, 20, 0.6);
-}
-
-.beam-right {
-    left: 26.5%;
-    top: 60%;
-    width: 44px;
-    height: 18px;
-    box-shadow: 0 0 25px rgba(255, 0, 20, 0.95), 0 0 50px rgba(229, 9, 20, 0.65);
-}
-
-@keyframes tailLightBreathe {
-    0%, 100% {
-        opacity: 0.45;
-        transform: scale(0.95);
-        filter: blur(5px) drop-shadow(0 0 10px rgba(229, 9, 20, 0.4));
-    }
-    50% {
-        opacity: 1;
-        transform: scale(1.12);
-        filter: blur(4px) drop-shadow(0 0 25px rgba(255, 20, 35, 0.95));
-    }
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.7);
 }
 
 /* ================= MENÜNÜN ALTINDAKİ RACON CÜMLESİ ================= */
 .racon-quote-box {
     margin-top: auto;
-    padding-top: 15px;
+    padding-top: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -247,7 +273,7 @@ body, html {
 }
 
 .quote-line {
-    width: 45px;
+    width: 50px;
     height: 1.5px;
     background: linear-gradient(90deg, transparent, #e50914, transparent);
     margin-bottom: 10px;
@@ -256,19 +282,19 @@ body, html {
 
 .quote-text {
     font-family: 'Cinzel', serif;
-    font-size: 0.82rem;
+    font-size: 0.84rem;
     font-style: italic;
     font-weight: 700;
-    color: #e2e5ec;
+    color: #e5e8f0;
     letter-spacing: 1.5px;
-    line-height: 1.45;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95), 0 0 8px rgba(255, 255, 255, 0.15);
-    max-width: 92%;
+    line-height: 1.5;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.95), 0 0 10px rgba(255, 255, 255, 0.2);
+    max-width: 95%;
 }
 
 .quote-mark {
     color: #e50914;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 900;
     padding: 0 2px;
     text-shadow: 0 0 10px rgba(229, 9, 20, 0.7);
@@ -283,7 +309,7 @@ body, html {
 .modal {
     position: absolute;
     inset: 0;
-    background: rgba(3, 4, 7, 0.9);
+    background: rgba(3, 4, 7, 0.92);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     z-index: 100;
@@ -360,7 +386,6 @@ body, html {
     transform: scale(0.985);
 }
 
-/* Dönen Lazer Kırmızı Neon Işık */
 .char-card.neon-red::before {
     content: '';
     position: absolute;
@@ -385,7 +410,6 @@ body, html {
     100% { transform: rotate(360deg); }
 }
 
-/* İç Koyu Metalik Panel */
 .char-card.neon-red::after {
     content: '';
     position: absolute;

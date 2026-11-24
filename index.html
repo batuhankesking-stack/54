@@ -10,12 +10,23 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:ital,wght@0,700;0,800;0,900;1,700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=10">
+    <link rel="stylesheet" href="style.css?v=12">
 </head>
 <body>
 
     <!-- Parlaklık Katmanı -->
     <div id="brightness-layer"></div>
+
+    <!-- ================= OYUNA BAŞLAMAK İÇİN DOKUN EKRANI ================= -->
+    <div id="intro-start-screen" class="intro-start-overlay">
+        <div class="intro-start-box">
+            <div class="intro-start-logo"><span class="num-5">5</span><span class="num-4">4</span></div>
+            <div class="intro-start-sub">SAKARYA RACONU</div>
+            <div class="intro-tap-prompt">
+                <span class="prompt-text">OYUNA BAŞLAMAK İÇİN DOKUN</span>
+            </div>
+        </div>
+    </div>
 
     <!-- Mobil Dikey Görünüm -->
     <div class="mobile-container">
@@ -146,6 +157,12 @@
                         <span class="setting-label">Parlaklık</span>
                         <input type="range" id="brightness-slider" min="30" max="130" value="100" class="range-slider">
                     </div>
+
+                    <!-- Otomatik Güncelleme / Önbellek Yenileme Butonu -->
+                    <div class="setting-item">
+                        <span class="setting-label">Oyun Sürümü</span>
+                        <button id="btn-check-updates" class="btn-check-update">🔄 Güncellemeyi Al</button>
+                    </div>
                 </div>
 
                 <!-- ANTİ&G Productions Reklamı -->
@@ -231,6 +248,6 @@
         <source src="polis_sesleri.mp3" type="audio/mpeg">
     </audio>
 
-    <script src="app.js?v=10"></script>
+    <script src="app.js?v=12"></script>
 </body>
 </html>

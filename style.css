@@ -33,6 +33,70 @@ body, html {
     transition: opacity 0.15s ease;
 }
 
+/* ================= OYUNA BAŞLAMAK İÇİN DOKUN EKRANI ================= */
+.intro-start-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(3, 4, 7, 0.94);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 99999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.intro-start-overlay.fade-out {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.intro-start-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+}
+
+.intro-start-logo {
+    font-family: 'Cinzel', serif;
+    font-size: 5.5rem;
+    font-weight: 900;
+    line-height: 1;
+    filter: drop-shadow(0 6px 20px rgba(0, 0, 0, 0.9));
+}
+
+.intro-start-sub {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    letter-spacing: 5px;
+    color: #a4abbb;
+    margin-bottom: 20px;
+}
+
+.intro-tap-prompt {
+    background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%);
+    border: 1px solid #ef4444;
+    color: #ffffff;
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    padding: 14px 28px;
+    border-radius: 30px;
+    box-shadow: 0 4px 25px rgba(220, 38, 38, 0.6);
+    animation: startPromptPulse 2s infinite alternate;
+}
+
+@keyframes startPromptPulse {
+    0% { transform: scale(0.97); box-shadow: 0 4px 15px rgba(220, 38, 38, 0.45); }
+    100% { transform: scale(1.03); box-shadow: 0 6px 30px rgba(220, 38, 38, 0.9); }
+}
+
 /* Mobil Dikey Görünüm (9:16 Orantılı) */
 .mobile-container {
     position: relative;
@@ -521,6 +585,23 @@ input:checked + .slider::before {
 .range-slider {
     accent-color: #e50914;
     width: 110px;
+}
+
+.btn-check-update {
+    background: rgba(229, 9, 20, 0.2);
+    border: 1px solid #e50914;
+    color: #ffffff;
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn-check-update:active {
+    background: #e50914;
 }
 
 /* ANTİ&G Productions Reklamı */

@@ -78,16 +78,27 @@ document.addEventListener('DOMContentLoaded', () => {
     playAllSounds();
 
     // Ekrana ilk dokunuşta kesin başlat (Tarayıcı engeli varsa anında kırılır)
-    const onFirstUserTouch = () => {
-        playAllSounds();
-        window.removeEventListener('pointerdown', onFirstUserTouch);
-        window.removeEventListener('touchstart', onFirstUserTouch);
-        window.removeEventListener('click', onFirstUserTouch);
-    };
+    const introStartScreen = document.getElementById('intro-start-screen');
 
-    window.addEventListener('pointerdown', onFirstUserTouch, { once: true });
-    window.addEventListener('touchstart', onFirstUserTouch, { once: true });
-    window.addEventListener('click', onFirstUserTouch, { once: true });
+    function handleStartIntro() {
+        playAllSounds();
+        if (introStartScreen) {
+            introStartScreen.classList.add('fade-out');
+            setTimeout(() => {
+                introStartScreen.style.display = 'none';
+            }, 450);
+        }
+        window.removeEventListener('pointerdown', handleStartIntro);
+        window.removeEventListener('touchstart', handleStartIntro);
+        window.removeEventListener('click', handleStartIntro);
+    }
+
+    if (introStartScreen) {
+        introStartScreen.addEventListener('click', handleStartIntro);
+    }
+    window.addEventListener('pointerdown', handleStartIntro, { once: true });
+    window.addEventListener('touchstart', handleStartIntro, { once: true });
+    window.addEventListener('click', handleStartIntro, { once: true });
 
     // Ayarlardan Aç / Kapat
     musicToggle.addEventListener('change', (e) => {
@@ -256,6 +267,38 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         trailerVideo.addEventListener('ended', closeTrailerPlayer);
+    }
+
+    // ================= OTOMATİK GÜNCELLEME VE ÖNBELLEK KONTROLÜ =================
+    const LOCAL_VERSION = 12;
+    function checkForUpdates(silent = true) {
+        fetch('version.json?_=' + Date.now(), { cache: 'no-store' })
+            .then(res => res.json())
+            .then(data => {
+                const storedVer = parseInt(localStorage.getItem('54_app_version') || '0');
+                if (data.version && data.version > storedVer) {
+                    localStorage.setItem('54_app_version', data.version);
+                    if (!silent) notify('Yeni sürüm yüklendi, yenileniyor...');
+                    setTimeout(() => {
+                        window.location.reload(true);
+                    }, 400);
+                } else if (!silent) {
+                    notify('Oyun en son sürümde!');
+                }
+            })
+            .catch(() => {
+                if (!silent) notify('Sürüm kontrol edilemedi.');
+            });
+    }
+
+    // Sayfa açıldığında otomatik denetle (Kullanıcı hiçbir şey yapmasa bile yeni sürüm otomatik gelir)
+    checkForUpdates(true);
+
+    const btnCheckUpdates = document.getElementById('btn-check-updates');
+    if (btnCheckUpdates) {
+        btnCheckUpdates.addEventListener('click', () => {
+            checkForUpdates(false);
+        });
     }
 
     // Başlangıç Yüklemesi
